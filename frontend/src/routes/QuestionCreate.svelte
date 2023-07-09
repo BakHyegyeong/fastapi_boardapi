@@ -21,10 +21,13 @@
     }
 
     function errors_check(event) {
+        event.preventDefault();  
+        
         const { valid, errors_check } = Error(_subject, _content)
         if (valid) {
             error.subject = errors_check.subject
-            error.content = errors_check.content     
+            error.content = errors_check.content 
+            
         } else {
             fast_post_question(event)
         }

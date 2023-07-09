@@ -10,7 +10,7 @@ const Error = (subject, content) => {
     if (content.trim().length < 1) {
         valid = true
         errors_check.content = '내용을 작성해주세요.'
-    }
+    } 
 
     return {valid, errors_check}
 };
