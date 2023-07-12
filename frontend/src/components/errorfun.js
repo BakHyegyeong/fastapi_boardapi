@@ -16,3 +16,5 @@ const Error = (subject, content) => {
 };
 
 export default Error;
+
+// 이 부분도 비동기로 작성해야하나?

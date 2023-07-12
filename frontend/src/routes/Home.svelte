@@ -1,7 +1,7 @@
 <script>
 
     import {link} from 'svelte-spa-router'
-    import { get_question_list } from '../lib/api';
+    import { get_question_list } from '../lib/api.js';
 
     let question_list = []
   

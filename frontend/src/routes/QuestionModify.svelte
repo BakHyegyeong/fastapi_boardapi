@@ -1,8 +1,8 @@
 <script>
     import { push } from "svelte-spa-router";
-    import Error from "../components/errorfun"
-    import { get_question } from "../lib/api";
-    import { update_question } from "../lib/api";
+    import Error from "../components/errorfun.js"
+    import { get_question } from "../lib/api.js";
+    import { update_question } from "../lib/api.js";
 
     export let params = {}
     let question_id = params.question_id

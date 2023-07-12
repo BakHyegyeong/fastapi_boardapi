@@ -1,7 +1,7 @@
 <script>
     import {push} from 'svelte-spa-router'
-    import Error from "../components/errorfun"
-    import { post_question } from '../lib/api';
+    import Error from "../components/errorfun.js"
+    import { post_question } from '../lib/api.js';
 
     let _subject = ''
     let _content = ''

@@ -1,7 +1,7 @@
 <script>
     import { link,push } from "svelte-spa-router";
-    import { get_question } from "../lib/api";
-    import { delete_question } from "../lib/api";
+    import { get_question } from "../lib/api.js";
+    import { delete_question } from "../lib/api.js";
 
     export let params = {}
     let question_id = params.question_id
