@@ -22,22 +22,27 @@ const fastapi = async (url, method, body) => {
   export default fastapi;
   
   export const get_question_list = async () => {
-    return await fastapi('/list', 'GET');
+    return await fastapi('/question/list', 'GET');
   };
 
   export const get_question = async (id) => {
-    return await fastapi('/detail/'+id,'GET')
+    return await fastapi('/question/detail/'+id,'GET')
   }
 
   export const delete_question = async (id) => {
-    return await fastapi('/delete/'+id,'DELETE')
+    return await fastapi('/question/delete/'+id,'DELETE')
   }
   
   export const post_question = async (body) => {
-    return await fastapi('/create','POST',body)
+    return await fastapi('/question/create','POST',body)
   }
 
   export const update_question = async (body) => {
-    return await fastapi('/update','PUT',body)
+    return await fastapi('/question/update','PUT',body)
+  }
+
+  export const create_answer = async (id, body) => {
+    console.log(id)
+    return await fastapi('/answer/create/'+id,'POST',body)
   }
   

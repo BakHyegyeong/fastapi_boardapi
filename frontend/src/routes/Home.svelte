@@ -14,8 +14,14 @@
   
   <h1>게시판</h1>
   <ul>
-    {#each question_list as question }
-      <li><a use:link href="/detail/{question.id}">{question.subject}</a></li>
+    {#each question_list as question, i }
+      <tr>
+        <td>{i+1}</td>
+        <td>
+            <a use:link href="/detail/{question.id}">{question.subject}</a>
+        </td>
+        <td>{question.create_date}</td>
+    </tr>
     {/each}
   </ul>
 

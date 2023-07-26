@@ -1,10 +1,14 @@
 from sqlalchemy.orm import Session
 from models import Question
+from datetime import datetime
+
 from domain.question.question_schema import QuestionCreate,QuestionUpdate
 
 
 def get_question_list(db: Session):
-    q_list = db.query(Question).all()
+    q_list = db.query(Question)\
+        .order_by(Question.create_date.desc()) \
+        .all()
 
     return q_list
 
@@ -15,7 +19,8 @@ def get_question(db: Session, question_id: int):
 
 def create_question(db: Session, question_create: QuestionCreate):
     _question = Question(subject=question_create.subject,
-                         content=question_create.content)
+                         content=question_create.content,
+                         create_date=datetime.now())
     db.add(_question)
     db.commit()
 

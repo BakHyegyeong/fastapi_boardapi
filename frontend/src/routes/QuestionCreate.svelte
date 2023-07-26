@@ -1,6 +1,6 @@
 <script>
     import {push} from 'svelte-spa-router'
-    import Error from "../components/errorfun.js"
+    import Error_sc from "../components/errorfun.js"
     import { post_question } from '../lib/api.js';
 
     let _subject = ''
@@ -23,10 +23,11 @@
     function errors_check(event) {
         event.preventDefault();  
         
-        const { valid, errors_check } = Error(_subject, _content)
-        if (valid) {
+        const { valid, errors_check } = Error_sc(_subject,_content)
+        
+        if (valid.subject || valid.content ) {
             error.subject = errors_check.subject
-            error.content = errors_check.content 
+            error.content = errors_check.content
             
         } else {
             fast_post_question(event)
