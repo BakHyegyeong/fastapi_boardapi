@@ -4,13 +4,16 @@
   import Detail from './routes/Detail.svelte';
   import QuestionCreate from './routes/QuestionCreate.svelte';
   import QuestionModify from './routes/QuestionModify.svelte';
+  import UserCreate from './routes/UserCreate.svelte';
+    import UserLogin from './routes/UserLogin.svelte';
 
   const routes = {
     '/' : Home,
     '/detail/:question_id' : Detail,
     '/question-modify/:question_id' : QuestionModify,
     '/question-create' : QuestionCreate,
-    
+    '/user-create' : UserCreate,
+    '/user-login' : UserLogin
   }
 </script>
 

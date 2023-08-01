@@ -1,22 +1,42 @@
 import axios from "axios";
+import Error from "../components/Error";
 
 const fastapi = async (url, method, body) => {
+
     let _url = import.meta.env.VITE_SERVER_URL  + url;
 
-    try {
+      try {
+
+        const response = await axios(_url, {
+          method: method,
+          data: body
+        });
+  
+        const { valid: _valid, _data: _data } = Error(response.status, response);
+        let result = [_valid,_data]
+
+        return result
+
+      } catch (error) {
+
+        if (error.response) {
+
+          const status_code = error.response.status;
+
+          const { valid: _valid, detail: _detail } = Error(status_code, error.response);
+          const result = [_valid,_detail]
+
+          //console.log(result)
+          return result
+
+        } else {
+
+          console.log("Error while making request:", error);
+          return { valid: false, detail: "요청 중 오류가 발생했습니다." };
         
-        const Response = await axios(_url, {
-            method: method,
-            data: body
-        })
+        }
+      }
         
-        console.log(Response.data)
-        
-        return Response.data
-        
-    } catch (e) {
-      console.error(e);
-    }
   };
   
   export default fastapi;
@@ -42,7 +62,14 @@ const fastapi = async (url, method, body) => {
   }
 
   export const create_answer = async (id, body) => {
-    console.log(id)
     return await fastapi('/answer/create/'+id,'POST',body)
+  }
+
+  export const create_user = async (body) => {
+    return await fastapi('/user/create','POST',body)
+  }
+
+  export const login_user = async (body) => {
+    return await fastapi('/user/login','POST',body)
   }
   

@@ -2,34 +2,23 @@
     import { link,push } from "svelte-spa-router";
     import { create_answer, get_question } from "../lib/api.js";
     import { delete_question } from "../lib/api.js";
-    import {Error_c} from "../components/errorfun.js";
 
     export let params = {}
     let question_id = params.question_id
     let question = {answers:[]}
 
     let _content = ""
-    let error = {content : ''}
+    let error = []
     
     async function fast_get_detail() {
-        question = await get_question(question_id)
+        const result = await get_question(question_id)
+        question = result[1]        
     }
 
     async function fast_delete_question() {
         if(window.confirm('정말로 삭제하시겠습니까?')){
             await delete_question(question_id)
             push('/')
-        }
-    }
-
-    function errors_check(event) {
-        event.preventDefault();  
-        
-        const { valid, errors_check } = Error_c(_content)
-        if (valid.content) {
-            error.content = errors_check.content    
-        } else {
-            fast_create_answer(event)
         }
     }
 
@@ -40,8 +29,15 @@
             "content" : _content
         }
 
-        await create_answer(question_id,_body)
-        location.reload();
+        const result = await create_answer(question_id,_body)
+        
+        if (result[0]){
+            location.reload();
+        }else {
+            error = result[1]
+            //console.log(error)        
+        }
+        
     }
 
     fast_get_detail()
@@ -66,8 +62,12 @@
 
 <form method="post">
     <textarea rows="15" bind:value={_content}></textarea>
-    <div>{error.content}</div>
-    <input type = "submit" value = "답변등록" on:click={(response) => errors_check(response)}>
+    <div>
+        {#each error as er}
+            <li>{er}</li>
+        {/each}
+    </div>
+    <input type = "submit" value = "답변등록" on:click={(response) => fast_create_answer(response)}>
 </form>
 
 

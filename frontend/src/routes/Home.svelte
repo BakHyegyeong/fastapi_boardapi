@@ -6,7 +6,8 @@
     let question_list = []
   
     async function fast_get_list(){
-      question_list = await get_question_list()
+      const result = await get_question_list()
+      question_list = result[1]
     }
     
     fast_get_list()
@@ -26,3 +27,5 @@
   </ul>
 
   <a use:link href="/question-create" class="btn btn-primary">질문 등록하기</a>
+  <a use:link href="/user-create" class="btn btn-primary">회원가입하기</a>
+  <a use:link href="/user-login" class="btn btn-primary">로그인하기</a>
