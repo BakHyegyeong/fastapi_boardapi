@@ -9,11 +9,14 @@ router = APIRouter(
 )
 
 
-@router.get("/list", response_model=list[question_schema.Question])
-def question_list(db: Session = Depends(get_db)):
-    _question_list = question_crud.get_question_list(db)
+@router.get("/list", response_model=question_schema.QuestionList)
+def question_list(db: Session = Depends(get_db),
+                  page: int = 0, size : int = 5):
+    total, _question_list = question_crud.get_question_list(db,skip=page*size, limit=size)
 
-    return _question_list
+    return {'total' : total,
+            'question_list' : _question_list
+    }
 
 
 @router.get("/detail/{question_id}", response_model=question_schema.Question)

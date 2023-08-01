@@ -5,12 +5,14 @@ from datetime import datetime
 from domain.question.question_schema import QuestionCreate,QuestionUpdate
 
 
-def get_question_list(db: Session):
-    q_list = db.query(Question)\
-        .order_by(Question.create_date.desc()) \
-        .all()
+def get_question_list(db: Session, skip: int = 0, limit: int = 5):
+    _q_list = db.query(Question)\
+        .order_by(Question.create_date.desc())
 
-    return q_list
+    total = _q_list.count()
+    q_list = _q_list.offset(skip).limit(limit).all()
+
+    return total, q_list
 
 def get_question(db: Session, question_id: int):
     question = db.query(Question).get(question_id)

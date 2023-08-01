@@ -41,8 +41,16 @@ const fastapi = async (url, method, body) => {
   
   export default fastapi;
   
-  export const get_question_list = async () => {
-    return await fastapi('/question/list', 'GET');
+  export const get_question_list = async (query) => {
+    //return await fastapi('/question/list', 'GET',query);
+
+    const response = await axios(import.meta.env.VITE_SERVER_URL + '/question/list'
+    , {params : query});
+
+    const { valid: _valid, _data: _data } = Error(response.status, response);
+    let result = [_valid,_data]
+
+    return result
   };
 
   export const get_question = async (id) => {
