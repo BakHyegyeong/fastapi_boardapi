@@ -3,13 +3,16 @@ import datetime
 from pydantic import BaseModel, validator
 
 from domain.answer.answer_schema import Answer
+from domain.user.user_schema import User
 
 class Question(BaseModel):
     id : int
     subject : str
     content : str
     create_date : datetime.datetime
+    modify_date: datetime.datetime | None = None
     answers : list[Answer] = []
+    user : User | None
 
     class Config :
         orm_mode = True

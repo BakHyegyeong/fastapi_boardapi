@@ -1,11 +1,14 @@
 <script>
     import {push} from 'svelte-spa-router'
     import { post_question } from '../lib/api.js';
+    import {access_token} from "../lib/store.js"
 
     let _subject = ''
     let _content = ''
     let error = []
     
+    console.log($access_token)
+
     async function fast_post_question(event){
         event.preventDefault()
 

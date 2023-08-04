@@ -1,7 +1,8 @@
 <script>
     import { push } from 'svelte-spa-router'
-    import { login_user } from "../lib/api.js"    
-
+    import { login_user } from "../lib/api.js"  
+    import { access_token, user_name, is_login } from "../lib/store.js"
+    
     let error = []
     let login_username = ""
     let login_password = ""
@@ -10,7 +11,7 @@
         event.preventDefault()
 
         const _body = {
-            "email" : login_username,
+            "username" : login_username,
             "password" : login_password,
         }
 
@@ -18,6 +19,11 @@
         //console.log(result)
 
         if (result[0]){
+            console.log(result[1])
+
+            $access_token = result[1].access_token
+            $user_name = result[1].username
+            $is_login = true
             push('/')
         }else {
             error = result[1]

@@ -1,6 +1,7 @@
 import datetime
 
 from pydantic import BaseModel, validator
+from domain.user.user_schema import User
 
 class AnswerCreate(BaseModel):
     content : str
@@ -16,7 +17,15 @@ class Answer(BaseModel):
     id : int
     content : str
     create_date : datetime.datetime
+    modify_date: datetime.datetime | None = None
+    user: User | None
 
     class Config:
         orm_mode = True
+
+class AnswerUpdate(AnswerCreate):
+    answer_id : int
+
+class AnswerDelete(BaseModel):
+    answer_id : int
 

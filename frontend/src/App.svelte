@@ -5,7 +5,8 @@
   import QuestionCreate from './routes/QuestionCreate.svelte';
   import QuestionModify from './routes/QuestionModify.svelte';
   import UserCreate from './routes/UserCreate.svelte';
-    import UserLogin from './routes/UserLogin.svelte';
+  import UserLogin from './routes/UserLogin.svelte';
+  import AnswerModify from './routes/AnswerModify.svelte';
 
   const routes = {
     '/' : Home,
@@ -13,7 +14,8 @@
     '/question-modify/:question_id' : QuestionModify,
     '/question-create' : QuestionCreate,
     '/user-create' : UserCreate,
-    '/user-login' : UserLogin
+    '/user-login' : UserLogin,
+    '/answer-modify/:answer_id' : AnswerModify, 
   }
 </script>
 

@@ -1,16 +1,40 @@
 import axios from "axios";
 import Error from "../components/Error";
+import { access_token} from "./store.js"
+import { get } from 'svelte/store'
+import qs from "qs"
 
-const fastapi = async (url, method, body) => {
+const fastapi = async (url, method, body, option) => {
 
     let _url = import.meta.env.VITE_SERVER_URL  + url;
 
+      let request = {
+        method: method,
+        headers : {
+          
+        },
+        data: body
+      }
+
+      if(option === 'login'){
+          request.headers.content_type = 'application/x-www-form-urlencoded',
+          request.data = qs.stringify(body)
+      }  
+
+      if(option === 'get_query'){
+        request.params = body      
+      }
+
+      const _access_token = get(access_token)
+      if (_access_token){
+        request.headers.Authorization = "Bearer " + _access_token     
+      }
+
+      console.log(request)
+
       try {
 
-        const response = await axios(_url, {
-          method: method,
-          data: body
-        });
+        const response = await axios(_url, request);
   
         const { valid: _valid, _data: _data } = Error(response.status, response);
         let result = [_valid,_data]
@@ -26,7 +50,7 @@ const fastapi = async (url, method, body) => {
           const { valid: _valid, detail: _detail } = Error(status_code, error.response);
           const result = [_valid,_detail]
 
-          //console.log(result)
+          console.log(_detail)
           return result
 
         } else {
@@ -42,15 +66,7 @@ const fastapi = async (url, method, body) => {
   export default fastapi;
   
   export const get_question_list = async (query) => {
-    //return await fastapi('/question/list', 'GET',query);
-
-    const response = await axios(import.meta.env.VITE_SERVER_URL + '/question/list'
-    , {params : query});
-
-    const { valid: _valid, _data: _data } = Error(response.status, response);
-    let result = [_valid,_data]
-
-    return result
+    return await fastapi('/question/list', 'GET',query,'get_query');
   };
 
   export const get_question = async (id) => {
@@ -73,11 +89,23 @@ const fastapi = async (url, method, body) => {
     return await fastapi('/answer/create/'+id,'POST',body)
   }
 
+  export const get_answer = async (id) => {
+    return await fastapi('/answer/detail/'+id, 'GET')
+  }
+
+  export const update_answer = async (body) =>{
+    return await fastapi('/answer/update','PUT',body)
+  }
+
+  export const delete_answer = async (id) => {
+    return await fastapi('/answer/delete/'+id,'DELETE')
+  }
+
   export const create_user = async (body) => {
     return await fastapi('/user/create','POST',body)
   }
 
   export const login_user = async (body) => {
-    return await fastapi('/user/login','POST',body)
+    return await fastapi('/user/login','POST',body,'login')
   }
   

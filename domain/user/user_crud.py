@@ -21,6 +21,6 @@ def get_existing_user(db: Session, user_create : UserCreate):
         (User.email == user_create.email)
     ).first()
 
-def get_user(db:Session, email: EmailStr):
-    return db.query(User).filter(User.email == email).first()
+def get_user(db:Session, username: str):
+    return db.query(User).filter(User.username == username).first()
 

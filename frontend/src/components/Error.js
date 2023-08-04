@@ -1,6 +1,18 @@
+import { push } from "svelte-spa-router"
+import { access_token, user_name, is_login } from "../lib/store.js"
+
 const Error = (status_code , response) => {
 
     let valid = true
+
+    if(status_code === 401){
+        access_token.set('')
+        user_name.set('')
+        is_login.set(false)
+
+        alert("로그인이 필요합니다.")
+        push('/')
+    }
 
     if(status_code >= 200 && status_code < 300){
 
@@ -13,16 +25,17 @@ const Error = (status_code , response) => {
         if ( response && response.data && response.data.detail) {
             const r_detail = response.data.detail;
         
-            //console.log(response.data)
+            //console.log(typeof response.data.detail)
 
             if (typeof r_detail === 'string'){
 
+                console.log(r_detail)
                 valid = false
-                return {valid, r_detail}
+                return {valid, detail : [r_detail]}
 
             }else if (typeof r_detail === 'object'){
            
-               valid = false
+                valid = false
                 let detail = []
 
                 //console.log(r_detail)
