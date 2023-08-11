@@ -7,6 +7,7 @@
   import UserCreate from './routes/UserCreate.svelte';
   import UserLogin from './routes/UserLogin.svelte';
   import AnswerModify from './routes/AnswerModify.svelte';
+  import SymptonHome from './routes/SymptonHome.svelte';
 
   const routes = {
     '/' : Home,
@@ -15,7 +16,8 @@
     '/question-create' : QuestionCreate,
     '/user-create' : UserCreate,
     '/user-login' : UserLogin,
-    '/answer-modify/:answer_id' : AnswerModify, 
+    '/answer-modify/:answer_id' : AnswerModify,
+    '/sympton-home' : SymptonHome, 
   }
 </script>
 

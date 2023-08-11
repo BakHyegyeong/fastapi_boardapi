@@ -39,6 +39,13 @@
     <label for="subject">제목</label>
     <input type="text" class="form-control" bind:value="{question.subject}">
 </div>
+<label for="tag">게시판 선택</label>
+        <select name="tag" id="tag" bind:value="{question.tag}">
+            <option value = "all">자유게시판</option>
+            <option value = "cook">요리게시판</option>
+            <option value = "worry">걱정게시판</option>
+            <option value = "good">자랑게시판</option>
+        </select>
 <div class="mb-3">
     <label for="content">내용</label>
     <textarea class="form-control" rows="10" bind:value="{question.content}"></textarea>

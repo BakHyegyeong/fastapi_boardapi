@@ -30,7 +30,7 @@ const fastapi = async (url, method, body, option) => {
         request.headers.Authorization = "Bearer " + _access_token     
       }
 
-      console.log(request)
+      //console.log(request)
 
       try {
 
@@ -107,5 +107,9 @@ const fastapi = async (url, method, body, option) => {
 
   export const login_user = async (body) => {
     return await fastapi('/user/login','POST',body,'login')
+  }
+
+  export const create_sympton = async(body) => {
+    return await fastapi('/sympton/create','POST',body)
   }
   
