@@ -7,13 +7,16 @@
 
 
     let question_list = []
+    let tag = ["all","cook","worry","good"]
+    let tag_list = [[],[],[],[]]
     let size = 5
     let total = 0
     $: total_page = Math.ceil(total/size)
   
-    async function fast_get_list(_page){
+    async function fast_get_list(_page,_tag){
 
       let query = {
+        tag : _tag,
         page : _page,
         size : size,
       }
@@ -22,16 +25,26 @@
       question_list = result[1].question_list
       $page = _page
       total = result[1].total
-      //console.log(result[1])
+      //console.log(result[1].question_list)
+
+      return question_list
     }
     
-    fast_get_list($page)
-
+    (async () => {
+      for (let i in tag){
+        tag_list[i] = await fast_get_list($page,tag[i])
+        //console.log(tag_list[i])
+    }
+    })()
+    
+    //console.log(tag_list)
+    
   </script>
   
-  <h1>게시판</h1>
+  <h1>자유게시판</h1>
+  
   <ul>
-    {#each question_list as question, i }
+    {#each tag_list[0] as question, i }
       <tr>
         <td>{ total - ($page * size) - i }</td>
         <td>
@@ -68,6 +81,77 @@
       </li>
     <!-- 페이징처리 끝 -->
   </ul>
+
+
+  <h1>요리게시판</h1>
+  <ul>
+    {#each tag_list[1] as question, i }
+      <tr>
+        <td>{ total - ($page * size) - i }</td>
+        <td>
+            <a use:link href="/detail/{question.id}">{question.subject}</a>
+            {#if question.answers.length > 0 }
+            <span>{question.answers.length}</span>
+            {/if}
+        </td>
+        <td>{ question.user ? question.user.username : "" }</td>
+        <td>
+          {#if question.modify_date}
+              <div>{question.modify_date}</div>
+          {:else}
+              <div>{question.create_date}</div>
+          {/if}
+        </td>
+    </tr>
+    {/each}
+ </ul> 
+
+ <h1>걱정게시판</h1>
+  <ul>
+    {#each tag_list[2] as question, i }
+      <tr>
+        <td>{ total - ($page * size) - i }</td>
+        <td>
+            <a use:link href="/detail/{question.id}">{question.subject}</a>
+            {#if question.answers.length > 0 }
+            <span>{question.answers.length}</span>
+            {/if}
+        </td>
+        <td>{ question.user ? question.user.username : "" }</td>
+        <td>
+          {#if question.modify_date}
+              <div>{question.modify_date}</div>
+          {:else}
+              <div>{question.create_date}</div>
+          {/if}
+        </td>
+    </tr>
+    {/each}
+ </ul> 
+
+ <h1>자랑게시판</h1>
+  <ul>
+    {#each tag_list[3] as question, i }
+      <tr>
+        <td>{ total - ($page * size) - i }</td>
+        <td>
+            <a use:link href="/detail/{question.id}">{question.subject}</a>
+            {#if question.answers.length > 0 }
+            <span>{question.answers.length}</span>
+            {/if}
+        </td>
+        <td>{ question.user ? question.user.username : "" }</td>
+        <td>
+          {#if question.modify_date}
+              <div>{question.modify_date}</div>
+          {:else}
+              <div>{question.create_date}</div>
+          {/if}
+        </td>
+    </tr>
+    {/each}
+ </ul> 
+
     {#if $is_login}
       <div>
         {"어서오세요, " + $user_name} <br>

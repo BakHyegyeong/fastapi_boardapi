@@ -5,8 +5,9 @@ from datetime import datetime
 from domain.question.question_schema import QuestionCreate,QuestionUpdate
 
 
-def get_question_list(db: Session, skip: int = 0, limit: int = 5):
+def get_question_list(db: Session, tag : str ,skip: int = 0, limit: int = 5):
     _q_list = db.query(Question)\
+        .filter(Question.tag == tag)\
         .order_by(Question.create_date.desc())
 
     total = _q_list.count()
@@ -24,6 +25,7 @@ def create_question(db: Session, question_create: QuestionCreate
     _question = Question(subject=question_create.subject,
                          content=question_create.content,
                          create_date=datetime.now(),
+                         tag = question_create.tag,
                          user=user)
     db.add(_question)
     db.commit()
@@ -37,6 +39,7 @@ def update_question(db: Session, db_question : Question,
                     update_question : QuestionUpdate):
     db_question.subject = update_question.subject
     db_question.content = update_question.content
+    db_question.tag = update_question.tag
     db_question.modify_date = datetime.now()
     db.add(db_question)
     db.commit()

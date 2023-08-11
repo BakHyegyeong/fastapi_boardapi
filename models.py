@@ -15,6 +15,7 @@ class Question(Base):
     user_id = Column(Integer,ForeignKey("user.id"), nullable=True)
     user = relationship("User",backref="question_users")
     modify_date = Column(DateTime, nullable=True)
+    tag = Column(String(500), nullable = True)
 
 
 class Answer(Base):
@@ -37,4 +38,19 @@ class User(Base):
     password = Column(String(500), nullable=False)
     email = Column(String(500), unique=True, nullable=False)
     birthday = Column(String(500),nullable=False)
+
+
+class Sympton(Base) :
+    __tablename__ = "sympton"
+
+    id = Column(Integer, primary_key=True)
+    create_date = Column(DateTime, nullable=False)
+    flushing_face = Column(Integer, nullable=False)
+    sweating = Column(Integer, nullable=False)
+    headache = Column(Integer, nullable = False)
+    dizziness = Column(Integer, nullable=False)
+    user_id = Column(Integer, ForeignKey("user.id"), nullable=False)
+    user = relationship("User",backref="sympton_users")
+
+
 
