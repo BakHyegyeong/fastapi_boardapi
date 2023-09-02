@@ -7,7 +7,7 @@
 
 
     let question_list = []
-    let tag = ["all","cook","worry","good"]
+    let tag = ["all","cook","book","good"]
     let tag_list = [[],[],[],[]]
     let size = 5
     let total = 0
@@ -106,7 +106,7 @@
     {/each}
  </ul> 
 
- <h1>걱정게시판</h1>
+ <h1>책추천게시판</h1>
   <ul>
     {#each tag_list[2] as question, i }
       <tr>

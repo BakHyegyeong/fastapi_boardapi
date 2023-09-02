@@ -10,6 +10,7 @@ from models import User
 
 router = APIRouter(
     prefix="/api/answer",
+    tags = ["answer"]
 )
 
 

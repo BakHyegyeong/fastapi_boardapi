@@ -12,12 +12,14 @@ def create_sympton(db: Session, sympton_create : SymptonCreate,
                        flushing_face = sympton_create.flushing_face,
                        sweating = sympton_create.sweating,
                        headache = sympton_create.headache,
-                       dizziness = sympton_create.dizziness
+                       condition = sympton_create.condition
                        )
     db.add(_sympton)
     db.commit()
 
-def get_sympton_list(db: Session):
-    s_list = db.query(Sympton).order_by(Sympton.create_date.desc()).all()
+def get_sympton_list(db: Session, current_user):
+    s_list = db.query(Sympton) \
+        .filter(Sympton.user_id == current_user.id)\
+        .order_by(Sympton.create_date.desc()).all()
 
     return s_list

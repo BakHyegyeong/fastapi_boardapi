@@ -1,5 +1,6 @@
-from pydantic import BaseModel, validator
+from pydantic import BaseModel
 import datetime
+
 
 from domain.user.user_schema import User
 
@@ -9,7 +10,7 @@ class Sympton(BaseModel):
     flushing_face: int
     sweating: int
     headache: int
-    dizziness: int
+    condition: int
     user : User
 
     class Config :
@@ -19,6 +20,7 @@ class SymptonCreate(BaseModel):
     flushing_face : int
     sweating : int
     headache : int
-    dizziness : int
+    condition : int
+
 
 

@@ -44,7 +44,7 @@
         <select name="tag" id="tag" bind:value="{_tag}">
             <option value = "all">자유게시판</option>
             <option value = "cook">요리게시판</option>
-            <option value = "worry">걱정게시판</option>
+            <option value = "book">책추천게시판</option>
             <option value = "good">자랑게시판</option>
         </select>
         <div class="mb-3">
