@@ -27,7 +27,7 @@ class QuestionCreate(BaseModel):
     content : str
     tag : str
 
-    @validator('subject','content')
+    @validator('subject','content','tag')
     def not_empty(cls, v):
         if not v or not v.strip() :
             raise ValueError('빈 값은 허용되지 않습니다.')
