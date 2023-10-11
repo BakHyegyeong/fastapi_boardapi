@@ -9,6 +9,7 @@ from starlette import status
 from datetime import timedelta, datetime
 
 from database import get_db
+from models import User
 from domain.user import user_crud, user_schema
 from domain.user.user_crud import pwd_context
 
@@ -37,9 +38,10 @@ def user_create(_user_create: user_schema.UserCreate, db: Session = Depends(get_
 # response_model은 return의 형태를 지정하는 것. 헷갈리지 말기...ㅠ
 @router.post("/login", response_model=user_schema.Token)
 def login_for_access_token(form_data : OAuth2PasswordRequestForm = Depends(),
+                            #form_data : user_schema.UserLogin,
                            db : Session = Depends(get_db)):
 
-    # username(ID)를 사용하여 사용자 모델의 객체 가져오기
+    # user_loginid(ID)를 사용하여 사용자 모델의 객체 가져오기
     user = user_crud.get_user(db, form_data.username)
 
     # 사용자 모델 객체가 아니거나 입력비밀번호와 저장된 비밀번호가 다를경우 오류발생
@@ -55,7 +57,7 @@ def login_for_access_token(form_data : OAuth2PasswordRequestForm = Depends(),
     # jwt(json web token)을 사용하여 액세스 토큰 생성
     # 사용자 ID와 토큰의 유효기간 설정.
     data = {
-        "sub" : user.username,
+        "sub" : user.user_loginid,
         "exp" : datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
         # 현재시각부터 24분
     }
@@ -66,7 +68,7 @@ def login_for_access_token(form_data : OAuth2PasswordRequestForm = Depends(),
     return {
         "access_token" : access_token,
         "token_type" : "bearer",
-        "username" : user.username
+        "user_loginid" : user.user_loginid
     }
 
 def get_current_user(token : str = Depends(oauth2_scheme)  , db: Session = Depends(get_db)):
@@ -79,21 +81,76 @@ def get_current_user(token : str = Depends(oauth2_scheme)  , db: Session = Depen
 
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        username: str = payload.get("sub")
-        if username is None:
+        user_loginid: str = payload.get("sub")
+        if user_loginid is None:
             raise credentials_exception
 
     except JWTError:
         raise credentials_exception
     else:
-        user = user_crud.get_user(db, username)
+        user = user_crud.get_user(db, user_loginid)
 
         if user is None:
             raise credentials_exception
         return user
 
 
+@router.get("/detail/{user_loginid}")
+def user_detail(user_loginid : str, db: Session = Depends(get_db),
+                current_user : User = Depends(get_current_user)):
+
+    user = user_crud.get_user(db, user_loginid = user_loginid)
+
+    if not user :
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="데이터를 찾을수 없습니다.")
+
+    if current_user.id != user.id :
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="수정 권한이 없습니다."
+        )
+
+    return user
+
+@router.put("/update")
+def user_update(_user_update : user_schema.UserUpdate,
+                db : Session = Depends(get_db),
+                current_user : User = Depends(get_current_user)):
+    db_user = user_crud.get_user(db, user_loginid= _user_update.user_loginid)
+
+    if not db_user :
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="데이터를 찾을수 없습니다.")
+
+    if current_user.id != db_user.id :
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="수정 권한이 없습니다."
+        )
+
+    user_crud.update_user(db = db, db_user= db_user,
+                          update_user= _user_update)
 
 
+@router.delete("/delete/{user_loginid}")
+def question_delete(user_loginid: str,
+                    db: Session = Depends(get_db),
+                    current_user : User = Depends(get_current_user)):
 
+    db_user = user_crud.get_user(db, user_loginid=user_loginid)
 
+    if not db_user :
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="데이터를 찾을수 없습니다.")
+
+    if current_user.id != db_user.id :
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="삭제 권한이 없습니다."
+        )
+
+    user_crud.delete_user(db = db, user_id = db_user.id)

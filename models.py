@@ -34,9 +34,9 @@ class User(Base):
     __tablename__ = "user"
 
     id = Column(Integer, primary_key=True)
+    user_loginid = Column(String(500), unique=True, nullable=False)
     username = Column(String(500), unique=True, nullable=False)
     password = Column(String(500), nullable=False)
-    email = Column(String(500), unique=True, nullable=False)
     birthday = Column(String(500),nullable=False)
 
 
