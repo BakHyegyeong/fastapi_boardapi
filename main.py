@@ -9,6 +9,7 @@ from domain.user import user_router
 from domain.sympton import sympton_router
 from domain.diary import diary_router
 from domain.physicalpain import physicalpain_router
+from domain.imdiary import imdiary_router
 
 app = FastAPI()
 
@@ -30,9 +31,10 @@ app.include_router(user_router.router)
 app.include_router(sympton_router.router)
 app.include_router(diary_router.router)
 app.include_router(physicalpain_router.router)
+app.include_router(imdiary_router.router)
 
 app.mount("/assets", StaticFiles(directory="frontend/dist/assets"))
 
-@app.get("/")
-def index():
-    return FileResponse("frontend/dist/index.html")
+# @app.get("/")
+# def index():
+#     return FileResponse("frontend/dist/index.html")

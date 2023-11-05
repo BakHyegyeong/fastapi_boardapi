@@ -65,6 +65,14 @@ class Diary(Base):
     content = Column(Text, nullable=False)
     emotion = Column(String(500), nullable=False)
 
+class ImDiary(Base):
+    __tablename__ = "imdiary"
+    id = Column(Integer, primary_key=True)
+    create_date = Column(DateTime, nullable=False)
+    user_id = Column(Integer, ForeignKey("user.id"), nullable=False)
+    user = relationship("User", backref="imdiary_users")
+    image = Column(String(500),nullable=False)
+
 class PhysicalPain(Base):
     __tablename__ = "physicalpain"
 

@@ -9,8 +9,8 @@ from starlette import status
 
 
 router = APIRouter(
-    prefix="/api/sympton",
-    tags = ["sympton"]
+    prefix="/api/symptom",
+    tags = ["symptom"]
 )
 
 
