@@ -21,7 +21,8 @@ router = APIRouter (
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # IMG_DIR = ".\images"
 # IMG_DIR = os.path.join(BASE_DIR,'images')
-IMG_DIR = "C:\project_Board\\board_api\domain\imdiary\images\\"
+# IMG_DIR = "C:\project_Board\\board_api\domain\imdiary\images\\"
+IMG_DIR = "/home/ubuntu/projects/boardapi/domain/imdiary/images/"
 
 @router.get("/list",response_model=list[imdiary_schema.ImDiary])
 def imdiary_list(db:Session = Depends(get_db),
@@ -30,9 +31,14 @@ def imdiary_list(db:Session = Depends(get_db),
 
     return _imdiary_list
 
-@router.get("/images/{file_name}")
+@router.get("/get_images/{file_name}")
 def get_image(file_name:str):
-    return FileResponse(file_name)
+
+    file_name = file_name.replace("%2F", "/")
+    _file_name = ''.join(file_name) 
+   # _file_name = ''.join('/home/ubuntu/projects/boardapi/domain/imdiary/images/6a43bc1c-189b-496d-ae5a-6b4526aa5a67.jpg')
+    return FileResponse(_file_name)
+  
 
 @router.post("/create",status_code=status.HTTP_204_NO_CONTENT)
 async def imdiary_create(image: UploadFile,
@@ -48,6 +54,7 @@ async def imdiary_create(image: UploadFile,
 
     # 이미지 경로
     image_url = ''.join([IMG_DIR,imagename])
+    image_url = image_url.replace("/", "%2F")
 
     imdiary_crud.create_imdiary(db,image_url,current_user)
 

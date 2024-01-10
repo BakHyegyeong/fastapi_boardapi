@@ -38,3 +38,27 @@ app.mount("/assets", StaticFiles(directory="frontend/dist/assets"))
 # @app.get("/")
 # def index():
 #     return FileResponse("frontend/dist/index.html")
+
+# app.mount("/images",StaticFiles(directory="/home/ubuntu/projects/boardapi/domain/imdiary/images"))
+
+app.mount("/Math_TemplateData",StaticFiles(directory="unity_webGL/MathGame/Math_TemplateData"))
+app.mount("/Math_Build",StaticFiles(directory="unity_webGL/MathGame/Math_Build"))
+
+app.mount("/Array_TemplateData",StaticFiles(directory="unity_webGL/ArrayGame/Array_TemplateData"))
+app.mount("/Array_Build",StaticFiles(directory="unity_webGL/ArrayGame/Array_Build"))
+
+app.mount("/Card_TemplateData",StaticFiles(directory="unity_webGL/CardGame/Card_TemplateData"))
+app.mount("/Card_Build",StaticFiles(directory="unity_webGL/CardGame/Card_Build"))
+
+
+@app.get("/unity_math")
+def index():
+	return FileResponse("unity_webGL/MathGame/index.html")
+
+@app.get("/unity_array")
+def index():
+	return FileResponse("unity_webGL/ArrayGame/index.html")
+
+@app.get("/unity_card")
+def index():
+	return FileResponse("unity_webGL/CardGame/index.html")
